@@ -4,6 +4,34 @@ const port = process.env.PORT || 3001;
 
 app.get("/", (req, res) => res.type('html').send(html));
 
+app.get('/pgx-carriers', (req, res) => {
+  const carriers = [
+      {
+          "id": 2,
+          "name": "DSV",
+          "carrier_account": "Carrier Name",
+          "methods": [
+              { "name": "common shipping method" },
+              { "name": "faster shipping method" },
+              { "name": "another shipping method" }
+          ]
+      },
+      {
+          "id": 3,
+          "name": "GEL",
+          "carrier_account": "Other Carrier Name",
+          "methods": [
+              { "name": "other common shipping method" },
+              { "name": "other faster shipping method" },
+              { "name": "other another shipping method" }
+          ]
+      }
+  ];
+
+  // Send response as JSON
+  res.json(carriers);
+});
+
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 server.keepAliveTimeout = 120 * 1000;
