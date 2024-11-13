@@ -1,35 +1,80 @@
 const express = require("express");
+const { Pool } = require('pg');
 const app = express();
+app.use(express.json()); // Middleware to parse JSON payloads
+const redisClient = redis.createClient();
 const port = process.env.PORT || 3001;
+
+// Set up PostgreSQL connection
+const pool = new Pool({
+  user: 'root',
+  host: 'dpg-csqch6bqf0us73c1tnmg-a',
+  database: 'dsvpackiyo',
+  password: 'BBDHYHUAXOcEtTjRQ6cfwLrQwLKuLQ3V',
+  port: 5432,
+});
 
 app.get("/", (req, res) => res.type('html').send(html));
 
-app.get('/pgx-carriers', (req, res) => {
+
+// List carriers in Packiyo
+app.get('/api/pgx-carriers', (req, res) => {
   const carriers = [
       {
-          "id": 2,
+          "id": 1,
           "name": "DSV",
-          "carrier_account": "Carrier Name",
+          "carrier_account": "DSV Logistcs",
           "methods": [
-              { "name": "common shipping method" },
-              { "name": "faster shipping method" },
-              { "name": "another shipping method" }
-          ]
-      },
-      {
-          "id": 3,
-          "name": "GEL",
-          "carrier_account": "Other Carrier Name",
-          "methods": [
-              { "name": "other common shipping method" },
-              { "name": "other faster shipping method" },
-              { "name": "other another shipping method" }
+              { "name": "Road" },
+              { "name": "Rail" },
+              { "name": "Air" },
+              { "name": "Sea" }
           ]
       }
   ];
-
   // Send response as JSON
   res.json(carriers);
+});
+
+// Create Shipment Label, receive payload from Packiyo
+app.post('/api/pgx-create-booking-lable', async (req, res) => {
+  const requestBody = req.body;
+  const requestHeaders = req.headers;
+
+  try {
+    // Insert data into PostgreSQL
+    const queryText = `
+      INSERT INTO requests (request_body, request_headers)
+      VALUES ($1, $2)
+      RETURNING id;
+    `;
+    const values = [requestBody, requestHeaders];
+
+    const result = await pool.query(queryText, values);
+    res.status(200).send(`Request saved with ID: ${result.rows[0].id}`);
+  } catch (error) {
+    console.error('Error saving request:', error);
+    res.status(500).send('Error saving request data');
+  }
+
+  const shipmentLabel = [
+    {
+      "id": "1234",
+      "total_cost": 0,
+      "labels": [
+          {
+              "package_number": 1,
+              "label_url": "http://shipping-label-1-url.pdf",
+              "cost": 0,
+              "tracking_links": {
+                  "number": "1234--172807432632",
+                  "link": ""
+              }
+          }
+      ]
+    }
+  ];
+  res.json(shipmentLabel);
 });
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
