@@ -2,7 +2,6 @@ const express = require("express");
 const { Pool } = require('pg');
 const app = express();
 app.use(express.json()); // Middleware to parse JSON payloads
-const redisClient = redis.createClient();
 const port = process.env.PORT || 3001;
 
 // Set up PostgreSQL connection
