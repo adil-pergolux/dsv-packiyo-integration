@@ -1,0 +1,62 @@
+{
+  "autobook": true,
+  "templateName": "",
+  "parties": {
+    "sender": {
+      "address": {
+        "companyName": "Test Company Name Inc.",
+        "addressId": "AddressID123",
+        "addressLine1": "Test Address Line 1",
+        "city": "Test Address City",
+        "countryCode": "DK",
+        "zipCode": "1234"
+      },
+      "contact": {
+        "name": "Test Name",
+        "email": "testemail@testcompany.com",
+        "telephone": "+4512345678"
+      }
+    },
+    "receiver": {
+      "address": {
+        "companyName": "Receiver Company Inc.",
+        "addressLine1": "Receiver Address Line 1",
+        "city": "Receiver City",
+        "countryCode": "US",
+        "zipCode": "5678"
+      },
+      "contact": {
+        "name": "Receiver Contact",
+        "email": "receiver@testcompany.com",
+        "telephone": "+11234567890"
+      }
+    },
+     "bookingParty": {
+            "address": {
+                "mdm": "7759231562"
+            }
+        }
+  },
+  "product": {
+    "name": "Road"
+  },
+  "incoterms": {
+      "code": "EXW",
+      "location": "TestCityPickup1"
+  },
+  "packages": [
+    {
+      "quantity": 2,
+      "packageType": "EUR",
+      "totalWeight": 1900,
+      "description": "Test Goods 1",
+      "shippingMarks": "Test Shipping Marks 1"
+    }
+  ],
+  "references": [
+    {
+      "value": "Test Reference",
+      "type": "SHIPPER_REFERENCE"
+    }
+  ]
+}

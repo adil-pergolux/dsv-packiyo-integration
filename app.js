@@ -1,4 +1,5 @@
 const express = require("express");
+const axios = require('axios');
 const { Pool } = require('pg');
 const app = express();
 app.use(express.json()); // Middleware to parse JSON payloads
@@ -40,6 +41,8 @@ app.post('/api/pgx-create-booking-lable', async (req, res) => {
   const requestBody = req.body;
   const requestHeaders = req.headers;
 
+  sendBookingRequest();
+
   try {
     // Insert data into PostgreSQL
     const queryText = `
@@ -75,6 +78,89 @@ app.post('/api/pgx-create-booking-lable', async (req, res) => {
   ];
   res.json(shipmentLabel);
 });
+
+async function sendBookingRequest() {
+  const url = 'https://api.dsv.com/my/booking/v2/bookings';
+  const token = 'Basic YWRpbC5hbGlAcGVyZ29sdXguZGU6UGVyZ29sdXhAMzQyMDI=';
+  const subscriptionKey = 'b0c3e5ebcc694871a8c3c610006b9d30';
+  
+  const payload = {
+    "autobook": true,
+    "templateName": "",
+    "parties": {
+      "sender": {
+        "address": {
+          "companyName": "New Test Company Name Inc.",
+          "addressId": "AddressID123",
+          "addressLine1": "Test Address Line 1",
+          "city": "Test Address City",
+          "countryCode": "DK",
+          "zipCode": "1234"
+        },
+        "contact": {
+          "name": "Test Name",
+          "email": "testemail@testcompany.com",
+          "telephone": "+4512345678"
+        }
+      },
+      "receiver": {
+        "address": {
+          "companyName": "Receiver Company Inc.",
+          "addressLine1": "Receiver Address Line 1",
+          "city": "Receiver City",
+          "countryCode": "US",
+          "zipCode": "5678"
+        },
+        "contact": {
+          "name": "Receiver Contact",
+          "email": "receiver@testcompany.com",
+          "telephone": "+11234567890"
+        }
+      },
+      "bookingParty": {
+        "address": {
+          "mdm": "7759231562"
+        }
+      }
+    },
+    "product": {
+      "name": "Road"
+    },
+    "incoterms": {
+      "code": "EXW",
+      "location": "TestCityPickup1"
+    },
+    "packages": [
+      {
+        "quantity": 2,
+        "packageType": "EUR",
+        "totalWeight": 1900,
+        "description": "NEw Goods 1",
+        "shippingMarks": "Test Shipping Marks 1"
+      }
+    ],
+    "references": [
+      {
+        "value": "Test Reference",
+        "type": "SHIPPER_REFERENCE"
+      }
+    ]
+  };
+
+  try {
+    const response = await axios.post(url, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+        'DSV-Service-Auth': token,
+        'DSV-Subscription-Key': subscriptionKey
+      }
+    });
+
+    console.log('Response:', response.data);
+  } catch (error) {
+    console.error('Error:', error.response ? error.response.data : error.message);
+  }
+}
 
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
