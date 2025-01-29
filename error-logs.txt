@@ -1,0 +1,6 @@
+2025-01-29 16:18:39 [ERROR]: Error sending email with booking ID 40288888880000806691: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials 4fb4d7f45d1cf-5dc186b37fesm8632050a12.61 - gsmtp
+2025-01-29 16:30:47 [ERROR]: Error sending email with booking ID 40288888880000806707: Invalid login: 535-5.7.8 Username and Password not accepted. For more information, go to
+535 5.7.8  https://support.google.com/mail/?p=BadCredentials a640c23a62f3a-ab6760fbd46sm1002145166b.135 - gsmtp
+2025-01-29 16:33:31 [ERROR]: Error sending email with booking ID 40288888880000806721: Can't send mail - all recipients were rejected: 501 Error: Bad recipient address syntax
+2025-01-29 16:46:10 [ERROR]: Error sending email with booking ID 40288888880000806745: connect ECONNREFUSED 127.0.0.1:25
